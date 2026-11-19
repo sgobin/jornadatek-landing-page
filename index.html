@@ -29,8 +29,8 @@
   <link rel="preload" href="assets/img/hero-truck.webp" as="image" type="image/webp" fetchpriority="high">
 
   <link rel="stylesheet" href="styles.css?v=2">
-  <script defer src="config.js"></script>
-  <script defer src="app.js"></script>
+  <script defer src="config.js?v=2"></script>
+  <script defer src="app.js?v=2"></script>
 </head>
 <body>
   <a class="skip" href="#conteudo">Pular para o conteúdo</a>
@@ -180,6 +180,15 @@
               <input id="name" name="name" autocomplete="name" placeholder="Nome completo" required maxlength="120" aria-describedby="name-error">
             </div>
             <small id="name-error" class="error"></small>
+          </div>
+
+          <div class="field">
+            <label for="farm">Nome da fazenda <span>(obrigatório)</span></label>
+            <div class="input-wrap">
+              <i class="icon icon-fazenda" aria-hidden="true"></i>
+              <input id="farm" name="farm" autocomplete="organization" placeholder="Nome da fazenda" required maxlength="120" aria-describedby="farm-error">
+            </div>
+            <small id="farm-error" class="error"></small>
           </div>
 
           <div class="field">

@@ -83,6 +83,9 @@ if (form) {
     if (field.name === 'name' && !/^\S+\s+\S+/.test(value)) {
       error = 'Informe seu nome completo.';
     }
+    if (field.name === 'farm' && value.length < 2) {
+      error = 'Informe o nome da sua fazenda.';
+    }
     if (field.name === 'city' && value.length < 3) {
       error = 'Informe sua cidade e estado.';
     }
@@ -95,8 +98,9 @@ if (form) {
     return !error;
   }
 
-  ['name', 'city', 'phone'].forEach(key => {
+  ['name', 'farm', 'city', 'phone'].forEach(key => {
     const field = form.elements[key];
+    if (!field) return;
     field.addEventListener('blur', () => validate(field));
     field.addEventListener('input', () => {
       if (field.getAttribute('aria-invalid') === 'true') validate(field);
@@ -110,7 +114,7 @@ if (form) {
     e.preventDefault();
     if (sending || sent) return;
 
-    const fields = ['name', 'city', 'phone'].map(k => form.elements[k]);
+    const fields = ['name', 'farm', 'city', 'phone'].map(k => form.elements[k]).filter(Boolean);
     const checks = fields.map(validate);
     if (checks.includes(false)) {
       fields[checks.indexOf(false)].focus();
@@ -135,6 +139,7 @@ if (form) {
     try {
       const payload = {
         name: form.elements.name.value.trim(),
+        farm: form.elements.farm ? form.elements.farm.value.trim() : '',
         city: form.elements.city.value.trim(),
         phone: phone.value.replace(/\D/g, ''),
         source: 'jornadatek',
@@ -144,10 +149,15 @@ if (form) {
         ...utmData,
       };
 
+      // Google Apps Script exige text/plain para evitar preflight CORS (OPTIONS).
+      const isAppsScript = /script\.google\.com/i.test(config.leadEndpoint);
       const response = await fetch(config.leadEndpoint, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': isAppsScript ? 'text/plain;charset=utf-8' : 'application/json',
+        },
         body: JSON.stringify(payload),
+        redirect: 'follow',
         signal: controller.signal,
       });
 
@@ -160,6 +170,17 @@ if (form) {
           // ignore JSON parse error
         }
         throw new Error(serverError);
+      }
+
+      try {
+        const data = await response.json();
+        if (data && data.ok === false) {
+          throw new Error(data.error || 'Falha no recebimento');
+        }
+      } catch (parseErr) {
+        if (parseErr instanceof Error && parseErr.message && parseErr.name !== 'SyntaxError') {
+          throw parseErr;
+        }
       }
 
       sent = true;
