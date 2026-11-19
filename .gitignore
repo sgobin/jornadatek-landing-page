@@ -1,0 +1,9 @@
+# Backup local original (arquivos brutos de ~330 MB — não versionar)
+arquivos/
+
+# Sistema / Ambiente
+.DS_Store
+.env
+.env.*
+supabase/.temp/
+*.log

@@ -1,0 +1,4 @@
+project_id = "jornadatek-leads"
+
+[functions.submit-lead]
+verify_jwt = false
