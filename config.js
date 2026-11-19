@@ -1,6 +1,5 @@
 window.JORNADA_CONFIG = {
-  // Cole aqui a URL do App da Web do Google Apps Script (termina em /exec)
-  leadEndpoint: '',
+  leadEndpoint: 'https://script.google.com/macros/s/AKfycbxzcihvy0i4KsIR5QI2DcLCS11NOaFPiFtBMCzlX2rgnwi3TFzVAF4tOx1QBXJihvgGZA/exec',
   videoUrl: 'assets/video/jornada-dia-zero-web.mp4',
   socialLinks: {
     instagram: 'https://www.instagram.com/krebsind/',
